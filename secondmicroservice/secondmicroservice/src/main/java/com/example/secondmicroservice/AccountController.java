@@ -14,7 +14,7 @@ public class AccountController {
 	
 	private Map<Integer, Integer> balance = new HashMap<>();
 	
-	@RequestMapping(path = "/accountbalance/{id}")
+	@RequestMapping(path = "/accountbalance/{id}",method = RequestMethod.GET)
 	public Integer getAccontBalance(@PathVariable Integer id) {
 		return balance.get(id);
 	}

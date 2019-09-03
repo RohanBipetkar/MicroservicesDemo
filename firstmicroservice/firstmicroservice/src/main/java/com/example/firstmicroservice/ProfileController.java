@@ -39,7 +39,7 @@ public class ProfileController {
 		profile.setAccountNo(accountNumber);
 		accountNumber++;
 		list.add(profile);
-		restTemplate.postForObject("http://localhost:8082/accountbalance/" + profile.getAccountNo(), profile,
+		restTemplate.postForObject("http://localhost:8082/accountbalance/", profile,
 				Profile.class, Integer.class);
 	}
 
