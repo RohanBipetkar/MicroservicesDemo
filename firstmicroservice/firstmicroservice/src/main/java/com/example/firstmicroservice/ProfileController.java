@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.websocket.server.PathParam;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,8 @@ import com.example.firstmicroservice.model.Profile;
 
 @RestController
 public class ProfileController {
-	RestTemplate restTemplate = new RestTemplate();
+	@Autowired
+	RestTemplate restTemplate;
 	ArrayList<Profile> list = new ArrayList<Profile>();
 	int accountNumber = 1;
 
@@ -26,7 +28,7 @@ public class ProfileController {
 		Optional<Profile> findFirst = list.stream().filter(p -> p.getAccountNo() == customerid).findFirst();
 		if (findFirst.isPresent()) {
 			Integer bal = restTemplate.getForObject(
-					"http://localhost:8082/accountbalance/" + findFirst.get().getAccountNo(), Integer.class);
+					"http://ACCOUNTSERVICE/accountbalance/" + findFirst.get().getAccountNo(), Integer.class);
 			findFirst.get().setBalance(bal == null ? 0 : bal);
 			return findFirst.get();
 		}
@@ -39,8 +41,7 @@ public class ProfileController {
 		profile.setAccountNo(accountNumber);
 		accountNumber++;
 		list.add(profile);
-		restTemplate.postForObject("http://localhost:8082/accountbalance/", profile,
-				Profile.class, Integer.class);
+		restTemplate.postForObject("http://ACCOUNTSERVICE/accountbalance/", profile, Profile.class, Integer.class);
 	}
 
 	@RequestMapping(path = "/profiles/customerid", method = RequestMethod.GET)
